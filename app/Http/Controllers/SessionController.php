@@ -30,7 +30,12 @@ class SessionController extends Controller
         ];
         if (Auth::attempt($credentials,$request->has('remember')))
         {
-            return redirect()->intended(route('users.show', [Auth::user()]));
+            if (Auth::user()->activated){
+                return redirect()->intended(route('users.show', [Auth::user()]));
+            }else{
+                Auth::logout();
+                return redirect()->back()->with('danger','您的账号尚未激活，请登录邮箱激活');
+            }
         } else {
             session()->flash('danger', '很抱歉，您的邮箱和密码不匹配');
             return redirect()->back();
