@@ -139,4 +139,17 @@ class UsersController extends Controller
         Auth::login($user);
         return redirect()->route('users.show', [$user])->with('success', '邮箱激活成功');
     }
+
+    public function followers(User $user)
+    {
+        $title='粉丝列表';
+        $users=$user->followers()->paginate(30);
+        return view('users.show_follow',compact('users','title'));
+    }
+    public function followings(User $user)
+    {
+        $title='关注列表';
+        $users=$user->followings()->paginate(30);
+        return view('users.show_follow',compact('users','title'));
+    }
 }
